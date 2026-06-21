@@ -491,49 +491,53 @@ ul[aria-label="Direct Messages"] {
 }
 
 
+
 /* =========================
-   DIRECT MESSAGES - HIDE TEXT
+   DIRECT MESSAGES - STABLE HIDE
    ========================= */
 
-/* container de cada DM */
+/* cada item da DM */
 div[aria-label="Direct Messages"] a {
     position: relative;
 }
 
-/* esconde TODO texto dentro do item */
-div[aria-label="Direct Messages"] a div {
+/* esconde conteúdo interno de forma segura */
+div[aria-label="Direct Messages"] a * {
     color: transparent !important;
     text-shadow: none !important;
+    opacity: 1 !important;
     transition: all 140ms ease;
 }
 
-/* garante que avatar continua visível */
+/* mantém avatar visível */
 div[aria-label="Direct Messages"] a img,
 div[aria-label="Direct Messages"] a svg,
 div[aria-label="Direct Messages"] a foreignObject {
     opacity: 1 !important;
 }
 
-/* cria os "..." no lugar do texto */
+/* substitui tudo por "..." */
 div[aria-label="Direct Messages"] a::after {
     content: "...";
     position: absolute;
-    left: 52px; /* depois do avatar */
+    left: 52px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-normal);
-    opacity: 1;
     letter-spacing: 2px;
+    opacity: 1;
     transition: all 140ms ease;
+    pointer-events: none;
 }
 
 /* =========================
-   HOVER: REVELAR TEXTO
+   HOVER NO ITEM INTEIRO
    ========================= */
 
-div[aria-label="Direct Messages"] a:hover div {
+div[aria-label="Direct Messages"] a:hover * {
     color: var(--text-normal) !important;
-    filter: none !important;
+    filter: blur(0px) !important;
+    transform: translateX(0px);
 }
 
 /* remove "..." no hover */
@@ -542,9 +546,9 @@ div[aria-label="Direct Messages"] a:hover::after {
     transform: translateY(-50%) translateX(6px);
 }
 
-/* animação leve de reveal */
-div[aria-label="Direct Messages"] a:hover div {
-    animation: dmReveal 160ms ease-out forwards;
+/* animação de reveal */
+div[aria-label="Direct Messages"] a:hover * {
+    animation: dmReveal 160ms ease-out;
 }
 
 /* =========================
