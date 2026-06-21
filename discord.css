@@ -490,51 +490,6 @@ ul[aria-label="Direct Messages"] {
     }
 }
 
-/* ===========================
-   DM LIST - NOME OCULTO
-   =========================== */
-
-/* estado padrão: só "..." */
-div[aria-label="Direct Messages"] a div[class*="name"],
-div[aria-label="Direct Messages"] a div[class*="subText"] {
-    opacity: 0;
-    transform: translateY(2px);
-    filter: blur(2px);
-    transition: opacity 120ms ease, transform 120ms ease, filter 120ms ease;
-}
-
-/* cria os 3 pontinhos no lugar do texto */
-div[aria-label="Direct Messages"] a div[class*="name"]::after {
-    content: "...";
-    opacity: 1;
-    font-weight: 500;
-}
-
-/* esconde texto real visualmente */
-div[aria-label="Direct Messages"] a div[class*="name"] {
-    position: relative;
-    color: transparent !important;
-}
-
-/* ===========================
-   HOVER NO CONTAINER DO DM
-   =========================== */
-
-div[aria-label="Direct Messages"] a:hover div[class*="name"],
-div[aria-label="Direct Messages"] a:hover div[class*="subText"] {
-    opacity: 1;
-    transform: translateY(0px);
-    filter: blur(0px);
-    color: inherit !important;
-
-    animation: dm-type-in 180ms ease-out forwards;
-}
-
-/* remove os "..." quando hover */
-div[aria-label="Direct Messages"] a:hover div[class*="name"]::after {
-    content: "";
-}
-
 /* =========================
    DIRECT MESSAGES - HIDE TEXT
    ========================= */
