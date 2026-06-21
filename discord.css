@@ -1,0 +1,529 @@
+/* Prevent re-rendering every message on scroll */
+[class*="scroller_"] {
+    will-change: scroll-position;
+}
+
+:root {
+    --prefer-squares: true;
+    --use-transparency: true;
+
+    --prefer-custom-font: true;
+    --custom-font-family: Torus;
+
+    --compact-user-area-buttons: true;
+
+    --truncate-chat-buttons: true;
+}
+
+@container style(--prefer-squares: true) {
+    * {
+        /* squares are better */
+        border-radius: 0 !important;
+    }
+
+    /* make switches square */
+    svg[class*="thumb_"]>rect {
+        /* yeah ik the ide says this is a warning, it does exist though */
+        rx: 0;
+    }
+
+    /* make profile pictures square in calls */
+    foreignObject[mask="url(#svg-mask-avatar-default)"] {
+        mask: none !important;
+    }
+
+    /* make servers and server folders square */
+    svg:has(div[data-list-item-id^="guildsnav"])>mask {
+        display: none;
+    }
+
+    svg:has(div[class*="folderButton"])>mask {
+        display: none;
+    }
+
+    div[class*="accountPopoutButtonWrapper"] {
+
+        /** hide the status icon from the user pfp - doesn't work well with squares**/
+        div[class*="avatar"] foreignObject {
+            mask: none;
+        }
+
+        g {
+            display: none;
+        }
+    }
+
+}
+
+@container style(--truncate-chat-buttons: true) {
+    /* hide unwanted chat bar buttons */
+    div[class*="buttons"] {
+        div[class*="app-launcher-entrypoint"],
+        div[aria-label="Send a gift"] {
+            display: none;
+        }
+
+        div[class*="expression-picker-chat-input-button"] {
+            &:has(div[aria-label="Add Emoji"]),
+            &:has(div[aria-label="Open sticker picker"]) {
+                display: none;
+            }
+        }
+    }
+}
+
+/* transparency wooo */
+@container style(--use-transparency: true) {
+    * {
+        --background-base-lowest: transparent !important;
+        --background-base-lower: transparent !important;
+        --background-base-low: transparent !important;
+        --custom-channel-members-bg: transparent !important;
+        --__header-bar-background: transparent !important;
+        --chat-background-default: transparent !important;
+    }
+
+    /* darken the app background now that it's transparent */
+    body {
+        /* default to black for non-transparency supporting clients (web) */
+        background-color: black;
+
+        /* only apply transparency if we're on a desktop client */
+        &:has(div[class*="winButtons"]) {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+    }
+
+    /* nicely add some "depth" to the app by darkening the inner parts */
+    div[class*="sidebarList"] {
+        background-color: rgba(0, 0, 0, 0.2);
+
+        /* fix sidebar list behaving weirdly with transparency */
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
+    section[aria-label="Channel header"] {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    main[class*="chatContent"][aria-label*="(channel)"] {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    main[class*="chatContent"]>div[class*="messagesWrapper"] {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+
+        box-shadow: inset rgba(0, 0, 0, 0.3) 0px 0px 15px;
+    }
+
+    div[class*="members_"][aria-orientation="vertical"] {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    main[class*="container"] {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* make the settings menu background work with transparency */
+    /*> normal version: */
+    div[data-mana-component="layer-modal"] {
+        background: rgba(0, 0, 0, 1);
+    }
+
+    /*> performance heavy version: */
+    /* div[class^="app"] {
+        transition: all 250ms;
+    }
+
+    div[class^="scrim"] {
+        opacity: 0 !important;
+    }
+
+    div[class*="notAppAsidePanel"]:has(> * > * > * > * > * > div[data-mana-component="layer-modal"]) {
+        div[class^="app"] {
+            opacity: 0;
+            transform: scale(0.98);
+        }
+    }
+    div[data-mana-component="layer-modal"] {
+        background: rgba(0,0,0,0.4);
+    } */
+
+    /* lets make the call background transparent too yk */
+    div[class*="wrapper"]:has(> div[class*="callContainer"]) {
+        --black: transparent;
+        --background-surface-high: rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* make the non-nitro user profile popout work with transparency */
+    div[class*="user-profile-modal-v2"] {
+        /* ps: this value is color picked and should be the normal default */
+        --background-base-lower: #070709 !important;
+    }
+
+    /* make vencord notifications work with transparency */
+    div.vc-notification {
+        background-color: black !important;
+    }
+
+    /** make activity panel work with transparency **/
+    section[aria-label="User status and settings"]>div[class*="activityPanel"] {
+        --background-surface-high: transparent
+    }
+
+    /* make chat sidebar work with transparency when floating */
+    div[class*="chatTarget"] {
+        margin-top: 1px;
+        border-left: 1px solid var(--app-frame-border);
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(16px);
+        box-shadow: #070709 1px 1px 20px;
+    }
+
+    /* make component v2 containers transparent */
+    div[class*="isComponentsV2"]>div[class*="container"] {
+        --background-surface-high: rgba(0, 0, 0, 0.35)
+    }
+
+    /* make hidden media attachments work with transparency */
+    div[class*="spoilerContainer"] {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    div[class*="spoilerInnerContainer"][aria-hidden="true"] {
+        filter: none !important;
+        background-color: transparent;
+        border: 1px solid var(--border-subtle);
+        box-sizing: border-box;
+
+        img {
+            display: none !important;
+        }
+    }
+
+    /* make reply bar and thread bar work with transparency */
+    div[class*="channelTextArea"]>div[class*="stackedBars"] {
+        background: transparent !important;
+    }
+
+
+    div[class*="callContainer"] {
+        /* make call container work with transparency */
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+
+        /* fix call container border */
+        border-top: none !important;
+        border-bottom: 1px solid var(--app-frame-border)
+    }
+}
+
+@container style(--prefer-custom-font: true) {
+    * {
+
+        /* osu! font */
+        @font-face {
+            src: url("https://github.com/PeeblyWeeb/DiscordCSS/raw/refs/heads/main/torus.otf") format("opentype");
+
+            font-family: "Torus";
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        font-family: var(--custom-font-family);
+    }
+}
+
+@container style(--compact-user-area-buttons: true) {
+    section[aria-label="User status and settings"] {
+        /** overlay mute and deafen buttons over the profile picture 
+        * (this css assumes you use hotkeys for mute and deafen)
+        **/
+
+        /*> performance heavy */
+        --animation-speed: 150ms;
+
+        svg[class*="avatarDecorationContainer"] {
+            transition: opacity var(--animation-speed), transform var(--animation-speed);
+        }
+
+        /* 
+        &:has(button[aria-checked="true"]) {
+            svg[class*="avatarDecorationContainer"] {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        } */
+        div[class*="buttons"] {
+            gap: 0;
+
+            button[aria-label="Input Options"],
+            button[aria-label="Output Options"] {
+                display: none;
+            }
+
+            button[aria-label="Mute"],
+            button[aria-label="Deafen"] {
+                pointer-events: none;
+
+                color: var(--icon-voice-muted) !important;
+                position: absolute;
+                left: 12px;
+                top: 12px;
+                transition: all var(--animation-speed);
+
+                &[aria-checked="false"] {
+                    opacity: 0;
+                }
+
+                &[aria-checked="true"][aria-label="Mute"] {
+                    backdrop-filter: brightness(30%);
+                }
+            }
+
+            button:not([aria-label="Mute"]):not([aria-label="Deafen"]) {
+                pointer-events: auto;
+                width: 56px;
+                height: 56px;
+            }
+
+            /*> performance heavy */
+            /* &:has(> div > button[aria-label="Deafen"][aria-checked="true"]) {
+                button[aria-label="Mute"] > div > div[class*="lottieIcon"] {
+                    transform: scale(0.8);
+                    opacity: 0;
+                }
+            } */
+        }
+
+        /** expand user profile in the user area **/
+        >div[class*="container"] {
+            border-left: 1px solid transparent;
+            padding: 0;
+            gap: 0;
+
+            div[class*="accountPopoutButtonWrapper"] {
+                -webkit-margin-start: 0;
+                margin-inline-start: 0;
+
+                padding: 0px;
+                padding-inline: 12px;
+                display: flex;
+                height: 100%;
+                /* width: 266px !important; */
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+/* make the server sidebar take up all vertical space */
+nav[aria-label="Servers sidebar"] {
+    margin-bottom: 0;
+}
+
+/*** major user area tweaks ***/
+/** fix sidebar list slightly leaking into the user area **/
+nav[aria-label*="(server)"] {
+    padding-bottom: var(--custom-app-panels-height);
+
+    div[class*="container"]>div[class*="containerPadding"] {
+        padding: 0px;
+
+        >div[class*="bar"] {
+            box-shadow: none;
+        }
+    }
+}
+
+nav[aria-label="Private channels"] {
+    padding-bottom: 0px;
+    margin-bottom: var(--custom-app-panels-height);
+
+    div[data-list-id*="private-channels"] {
+        margin-bottom: 0px;
+    }
+}
+
+div#channels {
+    margin-bottom: 0;
+}
+
+section[aria-label="User status and settings"] {
+    /** squish the user area back into the dm list area **/
+    /* UI Density: Compact */
+    /* --server-sidebar-width: 64px; */
+    /* UI Density: Default */
+    --server-sidebar-width: 72px;
+    /* UI Density: Spacious */
+    /* --server-sidebar-width: 80px; */
+
+    background-color: rgba(0, 0, 0, 0.15);
+
+    width: calc(100% - var(--server-sidebar-width));
+    padding: 0px;
+    bottom: 0px;
+    left: var(--server-sidebar-width);
+
+    border-right: none;
+    border-bottom: none;
+
+    /** when in voice calls hide unused buttons **/
+    div[class*="actionButtons"] {
+        :nth-child(5) {
+            /* Start an activity */
+            display: none;
+        }
+
+        span {
+            /* HACK: "Open soundboard" is a span, for whatever reason, just delete them all!! */
+            display: none;
+        }
+    }
+}
+
+/* align the text box to the bottom of the screen with the user area */
+form[class*="formWithLoadedChatInput"] {
+    margin-top: 0px !important;
+    padding-inline: 0;
+}
+
+form[class*="formWithLoadedChatInput"] div[class*="channelTextArea"] {
+    margin-bottom: 0;
+
+    border-bottom: none;
+    border-inline: none;
+
+    /* move autocomplete down to follow */
+    >div[class*="autocomplete"] {
+        left: 0;
+        bottom: calc(100% + 1px);
+        box-shadow: none;
+        width: 100%;
+    }
+}
+
+form[class*="formWithLoadedChatInput"] div[class*="typing_"] {
+    padding-left: 3.5rem;
+    top: 0px;
+
+    span {
+        margin-inline-start: 8px;
+    }
+}
+
+ol[data-list-id*="chat-messages"] div[class*="scrollerSpacer"] {
+    height: 24px;
+}
+
+/* hide real usernames until hover */
+span[class*="userTagUsername"]:not(:hover) {
+    position: relative;
+    visibility: hidden;
+
+    &::after {
+        width: 100%;
+        text-align: center;
+        top: 0px;
+        left: 0px;
+
+        visibility: visible;
+        position: absolute;
+        content: "...";
+    }
+}
+
+/* customize the discord loader */
+div[style*="connecting-container"] {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fade-in 200ms forwards;
+
+    >div[class*="problems"] {
+        display: none;
+    }
+
+    >div[class*="content"] {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+        animation: slidefade-from-bottom 200ms forwards ease-in-out;
+    }
+
+    >div[class*="content"]::before {
+        display: block;
+        content: "";
+        color: white;
+        aspect-ratio: 1/1;
+        height: 300px;
+        width: 320px;
+        background-size: cover;
+        background-image: url("https://github.com/PeeblyWeeb/DiscordCSS/blob/main/dance.gif?raw=true") !important;
+    }
+
+    div[class*="text"] {
+        display: none;
+    }
+
+    video {
+        display: none;
+    }
+}
+
+/* hide extra buttons in dm list */
+ul[aria-label="Direct Messages"] {
+
+    >div:has(a[href="/store"]),
+    >li:has(a[href="/shop"]),
+    >div:has(a[href="/quest-home"]) {
+        display: none;
+    }
+}
+/* ================================
+   AVATARES SÓ APARECEM NO HOVER
+   ================================ */
+
+/* estado normal: invisível */
+img[class*="avatar"],
+foreignObject[mask*="avatar"],
+svg[class*="avatar"],
+div[class*="avatar"] img {
+    opacity: 0 !important;
+    transform: scale(0.85);
+    filter: blur(6px);
+    transition: 
+        opacity 160ms ease,
+        transform 160ms ease,
+        filter 160ms ease;
+    pointer-events: auto; /* mantém hover funcionando */
+}
+
+/* aparece quando passar o mouse em cima do avatar */
+img[class*="avatar"]:hover,
+foreignObject[mask*="avatar"]:hover,
+svg[class*="avatar"]:hover,
+div[class*="avatar"]:hover img {
+    opacity: 1 !important;
+    transform: scale(1);
+    filter: blur(0px);
+}
+
+/* aparece também quando hover no container da mensagem (mais usável) */
+li[class*="message"]:hover img[class*="avatar"],
+li[class*="message"]:hover foreignObject[mask*="avatar"],
+li[class*="message"]:hover svg[class*="avatar"],
+li[class*="message"]:hover div[class*="avatar"] img {
+    opacity: 1 !important;
+    transform: scale(1);
+    filter: blur(0px);
+}
