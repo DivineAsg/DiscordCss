@@ -490,51 +490,65 @@ ul[aria-label="Direct Messages"] {
     }
 }
 
+
 /* =========================
    DIRECT MESSAGES - HIDE TEXT
    ========================= */
 
-/* esconde nomes e status dentro da DM list */
-div[aria-label="Direct Messages"] a div[class*="content"],
-div[aria-label="Direct Messages"] a div[class*="nameAndDecorators"],
-div[aria-label="Direct Messages"] a div[class*="name"],
-div[aria-label="Direct Messages"] a div[class*="subText"] {
-    color: transparent !important;
-    text-shadow: none !important;
-    transition: all 140ms ease;
+/* container de cada DM */
+div[aria-label="Direct Messages"] a {
     position: relative;
 }
 
-/* coloca "..." no lugar */
-div[aria-label="Direct Messages"] a div[class*="content"]::after {
+/* esconde TODO texto dentro do item */
+div[aria-label="Direct Messages"] a div {
+    color: transparent !important;
+    text-shadow: none !important;
+    transition: all 140ms ease;
+}
+
+/* garante que avatar continua visível */
+div[aria-label="Direct Messages"] a img,
+div[aria-label="Direct Messages"] a svg,
+div[aria-label="Direct Messages"] a foreignObject {
+    opacity: 1 !important;
+}
+
+/* cria os "..." no lugar do texto */
+div[aria-label="Direct Messages"] a::after {
     content: "...";
-    color: var(--text-normal);
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 52px; /* depois do avatar */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-normal);
     opacity: 1;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    transition: all 140ms ease;
 }
 
 /* =========================
-   HOVER NO ITEM DA DM
+   HOVER: REVELAR TEXTO
    ========================= */
 
-div[aria-label="Direct Messages"] a:hover div[class*="content"],
-div[aria-label="Direct Messages"] a:hover div[class*="nameAndDecorators"],
-div[aria-label="Direct Messages"] a:hover div[class*="name"],
-div[aria-label="Direct Messages"] a:hover div[class*="subText"] {
+div[aria-label="Direct Messages"] a:hover div {
     color: var(--text-normal) !important;
-    animation: dmReveal 180ms ease-out forwards;
+    filter: none !important;
 }
 
 /* remove "..." no hover */
-div[aria-label="Direct Messages"] a:hover div[class*="content"]::after {
-    content: "";
+div[aria-label="Direct Messages"] a:hover::after {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px);
+}
+
+/* animação leve de reveal */
+div[aria-label="Direct Messages"] a:hover div {
+    animation: dmReveal 160ms ease-out forwards;
 }
 
 /* =========================
-   ANIMAÇÃO (efeito digitação leve)
+   ANIMAÇÃO
    ========================= */
 
 @keyframes dmReveal {
@@ -542,17 +556,14 @@ div[aria-label="Direct Messages"] a:hover div[class*="content"]::after {
         opacity: 0;
         transform: translateX(6px);
         filter: blur(4px);
-        letter-spacing: 2px;
     }
     60% {
         opacity: 1;
         filter: blur(1px);
-        letter-spacing: 0.5px;
     }
     100% {
         opacity: 1;
         transform: translateX(0px);
         filter: blur(0px);
-        letter-spacing: normal;
     }
 }
