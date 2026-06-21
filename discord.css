@@ -491,74 +491,44 @@ ul[aria-label="Direct Messages"] {
 }
 
 
-
 /* =========================
-   DIRECT MESSAGES - STABLE HIDE
+   TESTE: TODOS OS TEXTOS DO DISCORD
    ========================= */
 
-/* cada item da DM */
-div[aria-label="Direct Messages"] a {
-    position: relative;
+/* esconde praticamente todo texto visível */
+span,
+div,
+p {
+    transition: all 140ms ease;
 }
 
-/* esconde conteúdo interno de forma segura */
-div[aria-label="Direct Messages"] a * {
+/* deixa tudo transparente */
+span {
     color: transparent !important;
     text-shadow: none !important;
-    opacity: 1 !important;
-    transition: all 140ms ease;
 }
 
-/* mantém avatar visível */
-div[aria-label="Direct Messages"] a img,
-div[aria-label="Direct Messages"] a svg,
-div[aria-label="Direct Messages"] a foreignObject {
+/* mantém ícones/avatares visíveis */
+img,
+svg,
+foreignObject {
     opacity: 1 !important;
 }
 
-/* substitui tudo por "..." */
-div[aria-label="Direct Messages"] a::after {
-    content: "...";
-    position: absolute;
-    left: 52px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-normal);
-    letter-spacing: 2px;
-    opacity: 1;
-    transition: all 140ms ease;
-    pointer-events: none;
-}
-
-/* =========================
-   HOVER NO ITEM INTEIRO
-   ========================= */
-
-div[aria-label="Direct Messages"] a:hover * {
+/* hover geral: revela tudo */
+span:hover {
     color: var(--text-normal) !important;
-    filter: blur(0px) !important;
-    transform: translateX(0px);
 }
 
-/* remove "..." no hover */
-div[aria-label="Direct Messages"] a:hover::after {
-    opacity: 0;
-    transform: translateY(-50%) translateX(6px);
+/* animação simples */
+span:hover {
+    animation: revealTest 160ms ease-out;
 }
 
-/* animação de reveal */
-div[aria-label="Direct Messages"] a:hover * {
-    animation: dmReveal 160ms ease-out;
-}
-
-/* =========================
-   ANIMAÇÃO
-   ========================= */
-
-@keyframes dmReveal {
+@keyframes revealTest {
     0% {
         opacity: 0;
-        transform: translateX(6px);
+        transform: translateY(4px);
         filter: blur(4px);
     }
     60% {
@@ -567,7 +537,7 @@ div[aria-label="Direct Messages"] a:hover * {
     }
     100% {
         opacity: 1;
-        transform: translateX(0px);
+        transform: translateY(0px);
         filter: blur(0px);
     }
 }
