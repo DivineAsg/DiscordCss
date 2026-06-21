@@ -535,26 +535,69 @@ div[aria-label="Direct Messages"] a:hover div[class*="name"]::after {
     content: "";
 }
 
-/* ===========================
-   ANIMAÇÃO DE DIGITAÇÃO
-   =========================== */
+/* =========================
+   DIRECT MESSAGES - HIDE TEXT
+   ========================= */
 
-@keyframes dm-type-in {
+/* esconde nomes e status dentro da DM list */
+div[aria-label="Direct Messages"] a div[class*="content"],
+div[aria-label="Direct Messages"] a div[class*="nameAndDecorators"],
+div[aria-label="Direct Messages"] a div[class*="name"],
+div[aria-label="Direct Messages"] a div[class*="subText"] {
+    color: transparent !important;
+    text-shadow: none !important;
+    transition: all 140ms ease;
+    position: relative;
+}
+
+/* coloca "..." no lugar */
+div[aria-label="Direct Messages"] a div[class*="content"]::after {
+    content: "...";
+    color: var(--text-normal);
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    letter-spacing: 1px;
+}
+
+/* =========================
+   HOVER NO ITEM DA DM
+   ========================= */
+
+div[aria-label="Direct Messages"] a:hover div[class*="content"],
+div[aria-label="Direct Messages"] a:hover div[class*="nameAndDecorators"],
+div[aria-label="Direct Messages"] a:hover div[class*="name"],
+div[aria-label="Direct Messages"] a:hover div[class*="subText"] {
+    color: var(--text-normal) !important;
+    animation: dmReveal 180ms ease-out forwards;
+}
+
+/* remove "..." no hover */
+div[aria-label="Direct Messages"] a:hover div[class*="content"]::after {
+    content: "";
+}
+
+/* =========================
+   ANIMAÇÃO (efeito digitação leve)
+   ========================= */
+
+@keyframes dmReveal {
     0% {
         opacity: 0;
-        letter-spacing: 2px;
+        transform: translateX(6px);
         filter: blur(4px);
-        transform: translateY(4px);
+        letter-spacing: 2px;
     }
     60% {
         opacity: 1;
-        letter-spacing: 0.5px;
         filter: blur(1px);
+        letter-spacing: 0.5px;
     }
     100% {
         opacity: 1;
-        letter-spacing: normal;
+        transform: translateX(0px);
         filter: blur(0px);
-        transform: translateY(0px);
+        letter-spacing: normal;
     }
 }
